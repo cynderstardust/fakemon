@@ -8,14 +8,17 @@ public class PlayerController : MonoBehaviour
     public Tilemap groundTilemap;
     public MapManager mapManager;
 
+    public Animator animator;
+
     public bool moving = false;
     public float moveSpeed = 1f;
     Vector3Int movementDestination;
     string moveDirection;
     int playerZPosition = -1;
+
     void Start()
     {
-       
+        animator.speed = 0;
     }
 
     // Update is called once per frame
@@ -84,21 +87,27 @@ public class PlayerController : MonoBehaviour
 
         //Check if arrived at new tile
         bool moveComplete = false;
+
+        animator.speed = 1;
         switch (moveDirection)
-        {
+        {          
             case "right":
+                animator.SetInteger("State", 3);                
                 if (gameObject.transform.position.x > movementDestination.x) moveComplete = true;                
                 break;
 
             case "left":
+                animator.SetInteger("State", 1);
                 if (gameObject.transform.position.x < movementDestination.x) moveComplete = true;
                 break;
                 
             case "up":
+                animator.SetInteger("State", 2);
                 if (gameObject.transform.position.y > movementDestination.y) moveComplete = true;
                 break;
 
             case "down":
+                animator.SetInteger("State", 0);
                 if (gameObject.transform.position.y < movementDestination.y) moveComplete = true;
                 break;
         }
@@ -107,6 +116,7 @@ public class PlayerController : MonoBehaviour
         {
             gameObject.transform.position = movementDestination;
             moving = false;
+            animator.speed = 0;
             OnMoveComplete();
         }
     }
