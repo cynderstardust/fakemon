@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
-    public Tilemap groundTilemap;
+    public Tilemap groundTilemap, objectsTilemap;
     public MapManager mapManager;
 
     public Animator animator;
@@ -69,10 +69,20 @@ public class PlayerController : MonoBehaviour
         }
 
         if (newPosition == null) return;        
-        Debug.Log($"New pos: {newPosition}");
+       // Debug.Log($"New pos: {newPosition}");
 
-        string destinationName = GetDestinationTileName((Vector3Int)newPosition);
+        //Check that the ground tile is passable
+        string destinationName = GetDestinationTileName((Vector3Int)newPosition, groundTilemap);
         if (destinationName.Equals("water")) return;
+
+        destinationName = GetDestinationTileName((Vector3Int)newPosition, objectsTilemap);
+        if (destinationName.Length > 0)
+        {
+            Debug.Log($"Moving to item type: {destinationName}");
+            return;
+        }
+
+
 
         movementDestination = (Vector3Int)newPosition;
         moving = true;                 
@@ -135,8 +145,10 @@ public class PlayerController : MonoBehaviour
         Debug.Log($"Moved to at {(Vector2Int)gridPosition}, tile: {clickedTile.name}");
     }
 
-    string GetDestinationTileName(Vector3Int destination)
+    string GetDestinationTileName(Vector3Int destination, Tilemap tilemap)
     {
-        return groundTilemap.GetTile(new Vector3Int(destination.x, destination.y, 0)).name;
+        var tile = tilemap.GetTile(new Vector3Int(destination.x, destination.y, 0));
+        if (tile == null) return "";
+        return tile.name;
     }
 }
