@@ -4753,6 +4753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundTilemap: {fileID: 246005687}
   mapManager: {fileID: 2147266498}
+  animator: {fileID: 1023390916}
   moving: 0
   moveSpeed: 5
 --- !u!212 &1023390914
