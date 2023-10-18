@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public MapManager mapManager;
 
     public Animator animator;
+    public GameObject InteractableObjectContainer;
 
     public bool moving = false;
     public float moveSpeed = 1f;
@@ -68,8 +69,12 @@ public class PlayerController : MonoBehaviour
             moveDirection = "down";
         }
 
-        if (newPosition == null) return;        
-       // Debug.Log($"New pos: {newPosition}");
+        if (newPosition == null) return;
+        // Debug.Log($"New pos: {newPosition}");
+
+        //Check for an interactable object, and if there is one, trigger the interaction then return
+        bool haveInteracted = CheckForInteractableObject((Vector3Int)newPosition);
+        if (haveInteracted) return;
 
         //Check that the ground tile is passable
         string destinationName = GetDestinationTileName((Vector3Int)newPosition, groundTilemap);
@@ -86,6 +91,24 @@ public class PlayerController : MonoBehaviour
 
         movementDestination = (Vector3Int)newPosition;
         moving = true;                 
+    }
+
+    bool CheckForInteractableObject(Vector3Int newPosition)
+    {
+        foreach (Transform child in InteractableObjectContainer.transform)
+        {
+            //Check the coordinates and see if the player is going to move into this cell
+            if ((int)child.position.x != newPosition.x || (int)child.position.y != newPosition.y) continue;
+
+            //Make sure there is an interactable script on the object
+            InteractableObject interactable = child.GetComponent<InteractableObject>();
+            if (interactable == null) continue;
+
+            interactable.Interact();
+            return true;           
+        }
+
+        return false;
     }
 
     void MoveCharacter()
