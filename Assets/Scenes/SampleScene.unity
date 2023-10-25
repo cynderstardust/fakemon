@@ -168,7 +168,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7468964826550469544, guid: 65e21147b501a0142a13f517945ff0bf, type: 3}
       propertyPath: m_Name
-      value: pkeball
+      value: Pokeball
       objectReference: {fileID: 0}
     - target: {fileID: 8730543744958422563, guid: 65e21147b501a0142a13f517945ff0bf, type: 3}
       propertyPath: m_RootOrder
