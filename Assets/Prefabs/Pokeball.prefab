@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8218915522401936400}
   - component: {fileID: 4466787747303316165}
   m_Layer: 0
-  m_Name: pkeball
+  m_Name: Pokeball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
