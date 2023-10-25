@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
 
     void ProcessInput()
     {
+        if (DialogueManager.instance.dialogueShowing) return;
+
         Vector3Int? newPosition = null;
         int xPos = (int)gameObject.transform.position.x;
         int yPos = (int)gameObject.transform.position.y;
