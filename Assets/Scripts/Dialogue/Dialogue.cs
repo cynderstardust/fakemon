@@ -5,6 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class Dialogue
 {
-    public string[] dialogues;
+    public DialoguePage[] pages;
 
 }

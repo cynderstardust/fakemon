@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8730543744958422563}
   - component: {fileID: 8218915522401936400}
-  - component: {fileID: 4466787747303316165}
+  - component: {fileID: -3023813607868942017}
   m_Layer: 0
   m_Name: Sign
   m_TagString: Untagged
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4466787747303316165
+--- !u!114 &-3023813607868942017
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,4 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8af055d72735f3644b512c7d9e0df74f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  message: This is a sign
+  dialogue:
+    pages: []

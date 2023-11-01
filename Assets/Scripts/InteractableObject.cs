@@ -6,15 +6,15 @@ public class InteractableObject : MonoBehaviour
 {
     [SerializeField]
     public Dialogue dialogue = new Dialogue();
-    readonly int MAXSTRINGLENGTH = 190;
+    readonly int MAXSTRINGLENGTH = 256;
 
     // Start is called before the first frame update
     void Start()
     {
-        foreach(string page in dialogue.dialogues)
+      /*  foreach(string page in dialogue.dialogues)
         {
             if (page.Length > MAXSTRINGLENGTH) Debug.LogWarning($"A dialogue on {gameObject.name} is too long at {page.Length} characters - {page}");
-        }
+        }*/
     }
 
     // Update is called once per frame
