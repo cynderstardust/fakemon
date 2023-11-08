@@ -27,16 +27,74 @@ public class DialogueManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E)) ProcessAction();
-        UpdateCaret();        
+        UpdateCaret();
+
+        CheckOptionSelectionKeys();
     }
 
+    void CheckOptionSelectionKeys()
+    {
+        if (currentPage == null) return;
+
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            if (selectedOption < currentPage.choices.Length - 1)
+            {
+                selectedOption++;
+                return;
+            } else if (selectedOption == currentPage.choices.Length - 1)
+            {
+                selectedOption = 0;
+                return;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            if (selectedOption > 0)
+            {
+                selectedOption--;
+                return;
+            }
+            else if (selectedOption == 0)
+            {
+                selectedOption = currentPage.choices.Length - 1;
+                return;
+            }
+        }
+    }
+
+    
+    
     void UpdateCaret()
     {
         //Turn off the blinking 'next page' carat if we have options to choose from
-        if(currentPage == null ||currentPage.choices.Length > 0)
+        if(currentPage == null || currentPage.choices.Length > 0)
         {
             caret.SetActive(false);
-            return;
+
+            switch (selectedOption)
+            {
+                case 0:
+                    option1Carat.gameObject.SetActive(true);
+                    option2Carat.gameObject.SetActive(false);
+                    option3Carat.gameObject.SetActive(false);
+                    break;
+
+                case 1:
+                    option1Carat.gameObject.SetActive(false);
+                    option2Carat.gameObject.SetActive(true);
+                    option3Carat.gameObject.SetActive(false);
+                    break;
+
+                case 2:
+                    option1Carat.gameObject.SetActive(false);
+                    option2Carat.gameObject.SetActive(false);
+                    option3Carat.gameObject.SetActive(true);
+                    break;
+            }
+
+            return; //Don't let the rest of the flashing caret code run
         }
 
         caretFlashTimer += Time.deltaTime;
@@ -47,6 +105,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    // Called by the object collision detection function
     public void ShowDialogue(Dialogue dialogue)
     {
         if (dialogue.pages.Length == 0) return;
@@ -64,41 +123,59 @@ public class DialogueManager : MonoBehaviour
 
         dialogueText.text = currentPage.text;
 
-        if(currentPage.choices == null)
+        Debug.Log($"Current page has {currentPage.choices.Length} choices");
+
+       //Turn all the options off first, then only turn them on if needed
+        option3Text.gameObject.SetActive(false);
+        option2Text.gameObject.SetActive(false);
+        option1Text.gameObject.SetActive(false);
+
+        option1Carat.gameObject.SetActive(false);
+        option2Carat.gameObject.SetActive(false);
+        option3Carat.gameObject.SetActive(false);
+
+
+        if (currentPage.choices.Length > 2)
         {
-            option3Text.gameObject.SetActive(false);
-            option2Text.gameObject.SetActive(false);
-            option1Text.gameObject.SetActive(false);
-        } else
-        {
-            option3Text.gameObject.SetActive(currentPage.choices.Length > 2);
-            option2Text.gameObject.SetActive(currentPage.choices.Length > 1);
-            option1Text.gameObject.SetActive(currentPage.choices.Length > 0);
+            option3Text.gameObject.SetActive(true);
+            option3Text.text = currentPage.choices[2].text;
         }
 
-        //TODO fix this first next time - the null check evaluating to false doesn't stop the || being evaluated
-       
-        
-        SetSelectedOption(currentPage.choices.Length);
+        if (currentPage.choices.Length > 1)
+        {
+            option2Text.gameObject.SetActive(true);
+            option2Text.text = currentPage.choices[1].text;
+        }
+
+        if (currentPage.choices.Length  > 0)
+        {
+            option1Text.gameObject.SetActive(true);
+            option1Text.text = currentPage.choices[0].text;
+        }
+
+        //This will also set the choice to -1 if there are no pages
+        SetSelectedOption(currentPage.choices.Length - 1);
     }
 
     void SetSelectedOption(int option)
     {
         selectedOption = option;
-
-
     }
 
     void ProcessAction()
     {
+        DialogueActionType selectedAction;
         //If the page has options, process the currently selected option
+        if(selectedOption >= 0)
+        {
+            selectedAction = currentPage.choices[selectedOption].action.type;
+        } else
+        {
+            //Otherwise, process the page's option
+            selectedAction = currentPage.action.type;
+        }
 
-
-        //Otherwise, process the page's option
-
-        DialogueActionType selectedType = currentPage.action.type;
-
-        switch (selectedType)
+        switch (selectedAction)
         {
             case DialogueActionType.GoToNextDialoguePage:
                 //Make sure there is a next page, if not, close
