@@ -19,6 +19,7 @@ public class DialogueAction
 {
     public DialogueActionType type;
     public int goToPage;
+    public string goToScene;
 }
 
 [System.Serializable]
@@ -29,7 +30,5 @@ public enum DialogueActionType
     GetItem,
     ChangeScene,
     StartBattle,
-    GoToDialoguePage,
-
-    
+    GoToDialoguePage,    
 }

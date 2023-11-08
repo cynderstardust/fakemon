@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -164,18 +165,18 @@ public class DialogueManager : MonoBehaviour
 
     void ProcessAction()
     {
-        DialogueActionType selectedAction;
+        DialogueAction selectedAction;
         //If the page has options, process the currently selected option
         if(selectedOption >= 0)
         {
-            selectedAction = currentPage.choices[selectedOption].action.type;
+            selectedAction = currentPage.choices[selectedOption].action;
         } else
         {
             //Otherwise, process the page's option
-            selectedAction = currentPage.action.type;
+            selectedAction = currentPage.action;
         }
 
-        switch (selectedAction)
+        switch (selectedAction.type)
         {
             case DialogueActionType.GoToNextDialoguePage:
                 //Make sure there is a next page, if not, close
@@ -191,6 +192,10 @@ public class DialogueManager : MonoBehaviour
 
             case DialogueActionType.CloseDialogue:
                 HideDialogue();
+                break;
+
+            case DialogueActionType.ChangeScene:
+                SceneManager.LoadScene(selectedAction.goToScene);
                 break;
         }
     }
